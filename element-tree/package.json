@@ -1,12 +1,15 @@
 {
   "name": "custom-element-tree",
-  "version": "1.0.0",
+  "version": "0.0.2",
   "description": "",
-  "main": "index.js",
+  "main": "lib/custom-element-tree.js",
+  "files": [
+    "lib"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "author": "Matsuuu <huhta.matias@gmail.com>",
+  "license": "MIT"
 }
