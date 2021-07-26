@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      body {
+        background: #fafafa;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="demo"></div>
+
+    <script type="module">
+      import { html, render } from "lit-html";
+      import "../lit-with-cem.js";
+
+      const title = "Hello owc World!";
+      render(
+        html`
+          <lit-with-cem .title=${title}> some more light-dom </lit-with-cem>
+        `,
+        document.querySelector("#demo")
+      );
+    </script>
+
+    <script type="module">
+      import { CustomElementTree } from "custom-element-tree/lib/custom-element-tree.js";
+      const tree = new CustomElementTree();
+      console.log(tree);
+    </script>
+  </body>
+</html>
