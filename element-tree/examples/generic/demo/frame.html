@@ -9,9 +9,7 @@
     </style>
   </head>
   <body>
-    <div id="demo"></div>
-
-    <iframe src="./frame.html"></iframe>
+    <div id="frame-demo"></div>
 
     <script type="module">
       import { html, render } from "lit-html";
@@ -22,15 +20,8 @@
         html`
           <lit-with-cem .title=${title}> some more light-dom </lit-with-cem>
         `,
-        document.querySelector("#demo")
+        document.querySelector("#frame-demo")
       );
-    </script>
-
-    <script type="module">
-      import { CustomElementTree } from "custom-element-tree/lib/custom-element-tree.js";
-      const tree = new CustomElementTree();
-      console.log(tree.flat());
-      tree.logTree();
     </script>
   </body>
 </html>

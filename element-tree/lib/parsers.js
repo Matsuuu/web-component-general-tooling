@@ -32,11 +32,13 @@ export function getElements(treeOrNode) {
 
     const ids = getRandomIdArray();
 
+    const allElements = new Array(lightDomElements.length + (shadowDomElements?.length ?? 0));
     lightDomElements.forEach((elem) => {
         if (elementIsDefined(elem)) {
             elements.push(
                 new CustomElementNode(elem, ids.next().value, treeOrNode, false)
             );
+            allElements.push(elem);
         }
     });
     shadowDomElements?.forEach((elem) => {
@@ -44,21 +46,41 @@ export function getElements(treeOrNode) {
             elements.push(
                 new CustomElementNode(elem, ids.next().value, treeOrNode, true)
             );
+            allElements.push(elem);
         }
     });
 
-    return elements;
+    return elements.filter(
+        (el) =>
+            !elementIsInsideChildComponent(treeOrNode.element, allElements, el.element)
+    );
+}
+
+/**
+ * @param {HTMLElement} parentElem
+ * @param {Array<HTMLElement>} allElements
+ * @param {HTMLElement} element
+ */
+function elementIsInsideChildComponent(parentElem, allElements, element) {
+    let isInside = false;
+    let el = element.parentElement ?? element.getRootNode()?.host ?? null;
+    while (el && el !== parentElem) {
+        if (el.nodeName.includes("-")) {
+            isInside = true;
+            break;
+        }
+        el = el.parentElement;
+    }
+    return isInside;
 }
 
 /**
  * @param {HTMLElement} element
  */
-export function elementIsDefined(element) {
+function elementIsDefined(element) {
     const elementDocument = element.ownerDocument;
     const elementWindow = elementDocument.defaultView;
 
     const tagName = element.tagName.toLowerCase();
-    return (
-        typeof elementWindow.customElements.get(tagName) !== "undefined"
-    );
+    return typeof elementWindow.customElements.get(tagName) !== "undefined";
 }
