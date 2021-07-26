@@ -23,37 +23,63 @@ function getRandomIdArray() {
 export function getElements(treeOrNode) {
     /** @type { Array<CustomElementNode> } */
     const elements = [];
-    /** @type { NodeListOf<HTMLElement> } */
+    /** @type { NodeListOf<HTMLElement | HTMLIFrameElement> } */
     const lightDomElements = treeOrNode.element.querySelectorAll("*");
-    /** @type { NodeListOf<HTMLElement> | undefined } */
+    /** @type { NodeListOf<HTMLElement | HTMLIFrameElement> | undefined } */
     const shadowDomElements = treeOrNode.element.shadowRoot
         ? treeOrNode.element?.shadowRoot.querySelectorAll("*")
         : undefined;
 
     const ids = getRandomIdArray();
 
-    const allElements = new Array(lightDomElements.length + (shadowDomElements?.length ?? 0));
-    lightDomElements.forEach((elem) => {
-        if (elementIsDefined(elem)) {
-            elements.push(
-                new CustomElementNode(elem, ids.next().value, treeOrNode, false)
-            );
-            allElements.push(elem);
-        }
-    });
-    shadowDomElements?.forEach((elem) => {
-        if (elementIsDefined(elem)) {
-            elements.push(
-                new CustomElementNode(elem, ids.next().value, treeOrNode, true)
-            );
-            allElements.push(elem);
-        }
-    });
+    const allElements = new Array(
+        lightDomElements.length + (shadowDomElements?.length ?? 0)
+    );
+    addElements(elements, lightDomElements, allElements, ids, treeOrNode, false);
+    addElements(elements, shadowDomElements, allElements, ids, treeOrNode, true);
 
     return elements.filter(
         (el) =>
-            !elementIsInsideChildComponent(treeOrNode.element, allElements, el.element)
+            !elementIsInsideChildComponent(
+                treeOrNode.element,
+                allElements,
+                el.element
+            )
     );
+}
+
+/**
+ * @param {NodeListOf<HTMLElement | HTMLIFrameElement> | CustomElementNode[]} elements
+ * @param {Array<CustomElementNode>} allElements
+ * @param {IterableIterator<number>} randomIds
+ * @param {CustomElementTree | CustomElementNode} treeOrNode
+ * @param {boolean} isShadow
+ */
+function addElements(elementsArray, elements, allElements, randomIds, treeOrNode, isShadow) {
+    elements?.forEach((elem) => {
+        if (elementIsDefined(elem)) {
+            elementsArray.push(
+                new CustomElementNode(
+                    elem,
+                    randomIds.next().value,
+                    treeOrNode,
+                    isShadow
+                )
+            );
+            allElements.push(elem);
+        }
+        if (elem instanceof HTMLIFrameElement) {
+            try {
+                // @ts-ignore
+                getElements({ element: elem.contentWindow.document }).forEach((e) => {
+                    elementsArray.push(e);
+                    allElements.push(e);
+                });
+            } catch (_ignored) {
+                // Ignore error. This happens if we can't access the iframe
+            }
+        }
+    });
 }
 
 /**

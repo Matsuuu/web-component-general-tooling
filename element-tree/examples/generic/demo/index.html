@@ -28,9 +28,11 @@
 
     <script type="module">
       import { CustomElementTree } from "custom-element-tree/lib/custom-element-tree.js";
-      const tree = new CustomElementTree();
-      console.log(tree.flat());
-      tree.logTree();
+
+      document.querySelector("iframe").contentWindow.onload = () => {
+        const tree = new CustomElementTree();
+        tree.logTree();
+      };
     </script>
   </body>
 </html>
