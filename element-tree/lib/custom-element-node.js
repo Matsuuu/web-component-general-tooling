@@ -28,10 +28,33 @@ export class CustomElementNode {
         this.root = this.element.getRootNode();
         /** @type { Array<CustomElementNode> } children */
         this.children = [];
+        /** @type { Array<CustomElementNode> } siblings */
+        this.siblings = [];
         /** @type { boolean } inShadowRoot */
         this.inShadowRoot = inShadow;
 
         this._getChildren();
+    }
+
+    /**
+     * @param {CustomElementNode} otherNode
+     */
+    isChildOf(otherNode) {
+
+    }
+
+    /**
+     * @param {CustomElementNode} otherNode
+     */
+    isParentOf(otherNode) {
+
+    }
+
+    /**
+     * @param {CustomElementNode} otherNode
+     */
+    isSiblingOf(otherNode) {
+
     }
 
     /** @private */

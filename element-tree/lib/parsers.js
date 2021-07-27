@@ -38,6 +38,11 @@ export function getElements(treeOrNode) {
     addElements(elements, lightDomElements, allElements, ids, treeOrNode, false);
     addElements(elements, shadowDomElements, allElements, ids, treeOrNode, true);
 
+    elements.forEach(elem => {
+        const siblings = getSiblings(elem, elements);
+        elem.siblings = siblings;
+    });
+
     return elements.filter(
         (el) =>
             !elementIsInsideChildComponent(
@@ -49,13 +54,48 @@ export function getElements(treeOrNode) {
 }
 
 /**
+ * @param {CustomElementNode} elementNode
+ * @param {Array<CustomElementNode>} otherElements
+ *
+ * @returns {Array<CustomElementNode>}
+ */
+function getSiblings(elementNode, otherElements) {
+    const siblings = [];
+    let prev = elementNode.element.previousElementSibling;
+    while (prev) {
+        const siblingNode = otherElements.find((oe) => oe.element === prev);
+        if (siblingNode) {
+            siblings.push(siblingNode);
+        }
+        prev = prev.previousElementSibling;
+    }
+    let next = elementNode.element.nextElementSibling;
+    while (next) {
+        const siblingNode = otherElements.find((oe) => oe.element === next);
+        if (siblingNode) {
+            siblings.push(siblingNode);
+        }
+        next = next.nextElementSibling;
+    }
+    return siblings;
+}
+
+/**
+ * @param {Array<CustomElementNode>} elementsArray
  * @param {NodeListOf<HTMLElement | HTMLIFrameElement> | CustomElementNode[]} elements
  * @param {Array<CustomElementNode>} allElements
  * @param {IterableIterator<number>} randomIds
  * @param {CustomElementTree | CustomElementNode} treeOrNode
  * @param {boolean} isShadow
  */
-function addElements(elementsArray, elements, allElements, randomIds, treeOrNode, isShadow) {
+function addElements(
+    elementsArray,
+    elements,
+    allElements,
+    randomIds,
+    treeOrNode,
+    isShadow
+) {
     elements?.forEach((elem) => {
         if (elementIsDefined(elem)) {
             elementsArray.push(
