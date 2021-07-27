@@ -63,6 +63,17 @@ export class CustomElementNode {
         return otherNode.siblings.some(sib => sib === this);
     }
 
+    allChildren() {
+        const allChildren = [];
+        this.children.forEach(c => {
+            allChildren.push(c);
+            c.allChildren().forEach(cc => {
+                allChildren.push(cc);
+            });
+        });
+        return allChildren;
+    }
+
     /** @private */
     _getChildren() {
         this.children = getElements(this);

@@ -28,13 +28,13 @@ export class CustomElementTree {
          * @param {CustomElementNode} elementNode
          */
         function getChildren(elementArray, elementNode) {
-            elementNode.children.forEach(el => {
+            elementNode.children.forEach((el) => {
                 elementArray.push(el);
                 getChildren(elementArray, el);
             });
         }
         const elements = [];
-        this.elements.forEach(e => {
+        this.elements.forEach((e) => {
             elements.push(e);
             getChildren(elements, e);
         });

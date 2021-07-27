@@ -31,7 +31,8 @@
 
       document.querySelector("iframe").contentWindow.onload = () => {
         const tree = new CustomElementTree();
-        tree.logTreeCollapsed();
+        console.log(tree.elements[0].children[0]);
+        console.log(tree.elements[0].children[0].allChildren());
       };
     </script>
   </body>
