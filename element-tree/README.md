@@ -19,18 +19,18 @@ tree.logTreeCollapsed();
 ```markdown
 Custom Element Tree
 |_<my-wrapper>
-|_<list-wrapper>
-|_<list-item>
-|_<list-item>
-|_<list-item>
-|_<list-wrapper>
-|_<list-item>
-|_<list-item>
-|_<list-item>
-|_<list-wrapper>
-|_<list-item>
-|_<list-item>
-|\_<list-item>
+  |_<list-wrapper>
+    |_<list-item>
+    |_<list-item>
+    |_<list-item>
+  |_<list-wrapper>
+    |_<list-item>
+    |_<list-item>
+    |_<list-item>
+  |_<list-wrapper>
+    |_<list-item>
+    |_<list-item>
+    |_<list-item>
 ```
 
 ### Get the tree nodes as a flat array

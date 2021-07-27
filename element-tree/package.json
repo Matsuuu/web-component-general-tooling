@@ -1,6 +1,6 @@
 {
   "name": "custom-element-tree",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "",
   "main": "lib/custom-element-tree.js",
   "files": [
