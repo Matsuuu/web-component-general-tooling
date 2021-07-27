@@ -96,13 +96,14 @@ function addElements(
     treeOrNode,
     isShadow
 ) {
+    const parent = treeOrNode instanceof CustomElementNode ? treeOrNode : undefined;
     elements?.forEach((elem) => {
         if (elementIsDefined(elem)) {
             elementsArray.push(
                 new CustomElementNode(
                     elem,
                     randomIds.next().value,
-                    treeOrNode,
+                    parent,
                     isShadow
                 )
             );

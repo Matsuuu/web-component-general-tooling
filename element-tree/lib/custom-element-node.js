@@ -1,11 +1,10 @@
-import { CustomElementTree } from "./custom-element-tree";
 import { getElements } from "./parsers";
 
 export class CustomElementNode {
     /**
      * @param {HTMLElement} element
      * @param {number} id
-     * @param {CustomElementTree | CustomElementNode} parentTreeOrNode
+     * @param {CustomElementNode} parentTreeOrNode
      * @param {boolean} inShadow
      */
     constructor(element, id, parentTreeOrNode, inShadow) {
@@ -15,8 +14,8 @@ export class CustomElementNode {
         this.tagName = element.tagName;
         /** @type { HTMLElement } element */
         this.element = element;
-        /** @type { HTMLElement } parent */
-        this.parent = parentTreeOrNode.element;
+        /** @type { CustomElementNode } parent */
+        this.parent = parentTreeOrNode;
         /** @type { number | undefined } parentId */
         this.parentId =
             parentTreeOrNode instanceof CustomElementNode
@@ -40,21 +39,28 @@ export class CustomElementNode {
      * @param {CustomElementNode} otherNode
      */
     isChildOf(otherNode) {
-
+        return otherNode.isParentOf(this);
     }
 
     /**
      * @param {CustomElementNode} otherNode
      */
     isParentOf(otherNode) {
-
+        const parentNodes = [];
+        let par = otherNode.parent;
+        while (par) {
+            parentNodes.push(par);
+            if (par === this) break;
+            par = par.parent;
+        }
+        return parentNodes.includes(this);
     }
 
     /**
      * @param {CustomElementNode} otherNode
      */
     isSiblingOf(otherNode) {
-
+        return otherNode.siblings.some(sib => sib === this);
     }
 
     /** @private */

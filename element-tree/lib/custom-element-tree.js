@@ -61,5 +61,6 @@ export class CustomElementTree {
         }
         console.log("Elements #: ", this.elementCount);
         this.elements.forEach((el) => el.logNode());
+        console.groupEnd();
     }
 }
